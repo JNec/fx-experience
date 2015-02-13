@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>fx-onscreen-keyboard</artifactId>
-	<version>8.1.0-SNAPSHOT</version>
+	<version>8.1.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>fx-onscreen-keyboard</name>
 	<description>JavaFX on-screen keyboard component with xml layout configuration.</description>
@@ -33,6 +33,7 @@
 
 	<build>
 		<plugins>
+			<!-- 
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jaxb2-maven-plugin</artifactId>
@@ -54,6 +55,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -68,6 +70,11 @@
 							</excludes>
 						</resource>
 					</resources>
+					<excludes>
+						<exclude>**/org/comtel/samples/*</exclude>
+						<exclude>**/org/comtel/swing/*</exclude>
+						<exclude>**/org/comtel/swing/ui/*</exclude>
+					</excludes>				
 				</configuration>
 			</plugin>
 			<plugin>
@@ -95,6 +102,11 @@
 							</addDefaultImplementationEntries>
 						</manifest>
 					</archive>
+					<excludes>
+						<exclude>**/org/comtel/samples/*</exclude>
+						<exclude>**/org/comtel/swing/*</exclude>
+						<exclude>**/org/comtel/swing/ui/*</exclude>
+					</excludes>
 				</configuration>
 			</plugin>
 		</plugins>
