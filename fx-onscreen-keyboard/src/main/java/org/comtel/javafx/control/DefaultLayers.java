@@ -1,5 +1,5 @@
 package org.comtel.javafx.control;
 
 public enum DefaultLayers {
-	DEFAULT, NUMBLOCK
+	DEFAULT, NUMBLOCK, NUMERIC_ONLY
 }

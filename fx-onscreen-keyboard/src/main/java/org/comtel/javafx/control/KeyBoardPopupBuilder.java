@@ -1,6 +1,5 @@
 package org.comtel.javafx.control;
 
-import java.nio.file.Path;
 import java.util.Locale;
 
 import javafx.util.Builder;
@@ -17,11 +16,6 @@ public class KeyBoardPopupBuilder implements Builder<KeyBoardPopup> {
 
 	public static KeyBoardPopupBuilder create() {
 		return new KeyBoardPopupBuilder();
-	}
-
-	public KeyBoardPopupBuilder layerPath(Path path) {
-		kb.layerPath(path);
-		return this;
 	}
 
 	public KeyBoardPopupBuilder initLocale(Locale locale) {

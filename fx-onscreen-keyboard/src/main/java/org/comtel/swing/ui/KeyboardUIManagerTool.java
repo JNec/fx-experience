@@ -40,7 +40,7 @@ public class KeyboardUIManagerTool {
 	}
 	
 	
-	private static FocusListener createFocusListener(EventCallback c) {
+	private static FocusListener createFocusListener(final EventCallback c) {
 		FocusListener l = new FocusListener() {
 			@Override
 			public void focusLost(FocusEvent e) {
@@ -55,7 +55,7 @@ public class KeyboardUIManagerTool {
 		return l;
 	}
 
-	private static MouseListener createMouseDoubleClickListener(EventCallback c) {
+	private static MouseListener createMouseDoubleClickListener(final EventCallback c) {
 		return new MouseListener() {
 			@Override
 			public void mouseReleased(MouseEvent e) {

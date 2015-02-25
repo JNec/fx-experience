@@ -1,6 +1,5 @@
 package org.comtel.javafx.control;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -10,8 +9,7 @@ import javafx.util.Builder;
 import org.comtel.javafx.robot.IRobot;
 
 public class KeyBoardBuilder implements Builder<KeyboardPane> {
-
-	private Path layerPath;
+  
 	private DefaultLayers defaultLayer;
 	private Locale initLocale;
 	private List<IRobot> iRobots;
@@ -24,11 +22,6 @@ public class KeyBoardBuilder implements Builder<KeyboardPane> {
 
 	public static KeyBoardBuilder create() {
 		return new KeyBoardBuilder();
-	}
-
-	public KeyBoardBuilder layerPath(Path path) {
-		layerPath = path;
-		return this;
 	}
 
 	public KeyBoardBuilder layer(DefaultLayers layer) {
@@ -67,10 +60,6 @@ public class KeyBoardBuilder implements Builder<KeyboardPane> {
 		if (initLocale != null) {
 			kb.setLocale(initLocale);
 		}
-		if (layerPath != null) {
-			kb.setLayerPath(layerPath);
-		}
-
 		if (defaultLayer != null) {
 			kb.setLayer(defaultLayer);
 		}
