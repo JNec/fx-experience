@@ -28,16 +28,16 @@ public class KeyboardLayoutHandler {
     }
   }
 
-  public Keyboard getLayoutFromClasspath(String file) throws IOException {
-    URL url = KeyboardLayoutHandler.class.getResource(file);
+  public Keyboard getLayoutFromClasspath(String fileUrl) throws IOException {
+    URL url = KeyboardLayoutHandler.class.getResource(fileUrl);
     if (url != null) {
       return getLayout(url);
     }
-    InputStream is = KeyboardLayoutHandler.class.getResourceAsStream(file);
+    InputStream is = KeyboardLayoutHandler.class.getResourceAsStream(fileUrl);
     if (is != null) {
       return getLayout(is);
     }
-    logger.warn("layout not found on: " + file);
+    logger.warn("layout not found on: " + fileUrl);
     return new Keyboard();
 
   }
@@ -63,7 +63,7 @@ public class KeyboardLayoutHandler {
     return null;
   }
 
-  public Keyboard getLayoutFromXml(String xml) throws IOException {
+  public Keyboard getLayout(String xml) throws IOException {
 
     Object obj = null;
     try {

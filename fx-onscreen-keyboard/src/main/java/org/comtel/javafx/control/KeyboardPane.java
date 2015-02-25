@@ -43,7 +43,9 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.transform.Scale;
 
 import org.comtel.javafx.event.KeyButtonEvent;
+import org.comtel.javafx.model.ClasspathKeyboardConfigProvider;
 import org.comtel.javafx.model.KeyboardConfig;
+import org.comtel.javafx.model.KeyboardConfigProvider;
 import org.comtel.javafx.robot.IRobot;
 import org.comtel.javafx.xml.KeyboardLayoutHandler;
 import org.comtel.javafx.xml.layout.KbLayoutXMLEnum;
@@ -53,6 +55,8 @@ import org.slf4j.LoggerFactory;
 public class KeyboardPane extends Region implements StandardKeyCode, EventHandler<KeyButtonEvent> {
 
   private final static org.slf4j.Logger logger = LoggerFactory.getLogger(KeyboardPane.class);
+  
+  private KeyboardConfigProvider provider = new ClasspathKeyboardConfigProvider();
 
   private final String DEFAULT_CSS = "/css/KeyboardButtonStyle.css";
   // private final String DEFAULT_FONT_URL = "/font/FontKeyboardFX.ttf";
@@ -201,22 +205,14 @@ public class KeyboardPane extends Region implements StandardKeyCode, EventHandle
     currentLocale.set(local);
     localeProperty.set(local);
     logger.debug("try to set keyboard local: {}", local);
-    KeyboardLayoutHandler handler = new KeyboardLayoutHandler();
-
-    String xmlPath = "/xml/" + layerProperty.get().toString().toLowerCase(Locale.ENGLISH)
-        + (local.getLanguage().equals("en") ? "/" : "/" + local.getLanguage() + "/");
-    logger.info("use embedded layouts path: {}", xmlPath);
-
+    
     try {
-    getChildren().clear();
-    qwertyKeyboardPane = createKeyboardPane(handler.getLayoutFromClasspath(xmlPath + KbLayoutXMLEnum.KB_LAYOUT_XML));
-    qwertyShiftedKeyboardPane = createKeyboardPane(handler.getLayoutFromClasspath(xmlPath
-        + KbLayoutXMLEnum.KB_LAYOUT_SHIFT_XML));
-    qwertyCtrlKeyboardPane = createKeyboardPane(handler.getLayoutFromClasspath(xmlPath
-        + KbLayoutXMLEnum.KB_LAYOUT_CTRL_XML));
-    symbolKeyboardPane = createKeyboardPane(handler.getLayoutFromClasspath(xmlPath + KbLayoutXMLEnum.KB_LAYOUT_SYM_XML));
-    symbolShiftedKeyboardPane = createKeyboardPane(handler.getLayoutFromClasspath(xmlPath
-        + KbLayoutXMLEnum.KB_LAYOUT_SYM_SHIFT_XML));
+      getChildren().clear();
+      qwertyKeyboardPane = createKeyboardPane(provider.getLayout(local, layerProperty().get(), KbLayoutXMLEnum.KB_LAYOUT_XML));
+      qwertyShiftedKeyboardPane = createKeyboardPane(provider.getLayout(local, layerProperty().get(), KbLayoutXMLEnum.KB_LAYOUT_SHIFT_XML));
+      qwertyCtrlKeyboardPane = createKeyboardPane(provider.getLayout(local, layerProperty().get(), KbLayoutXMLEnum.KB_LAYOUT_CTRL_XML));
+      symbolKeyboardPane = createKeyboardPane(provider.getLayout(local, layerProperty().get(), KbLayoutXMLEnum.KB_LAYOUT_SYM_XML));
+      symbolShiftedKeyboardPane = createKeyboardPane(provider.getLayout(local, layerProperty().get(), KbLayoutXMLEnum.KB_LAYOUT_SYM_SHIFT_XML));
     
     } catch (IOException ex) {
       throw new RuntimeException(ex);
@@ -237,21 +233,9 @@ public class KeyboardPane extends Region implements StandardKeyCode, EventHandle
   }
 
   public void setNumericOnlyLayout(Locale local) {
-    KeyboardLayoutHandler handler = new KeyboardLayoutHandler();
     Keyboard keyboard = null;
-    try {
-      if (keyboardCondifgs.isEmpty()) {
-        String xmlPath = "/xml/" + DefaultLayers.DEFAULT.toString().toLowerCase(Locale.ENGLISH)
-            + (local.getLanguage().equals("en") ? "/" : "/" + local.getLanguage() + "/");
-        keyboard = handler.getLayoutFromClasspath(xmlPath + KbLayoutXMLEnum.KB_LAYOUT_NUMERIC_XML);
-      } else {
-        for (KeyboardConfig config : keyboardCondifgs) {
-          if (config.getLocale().getLanguage().equals(local.getLanguage())) {
-            keyboard = handler.getLayoutFromXml(config.getNumericKeyboardXml());
-            break;
-          }
-        }
-      }
+    try {      
+        keyboard = provider.getLayout(local, DefaultLayers.DEFAULT, KbLayoutXMLEnum.KB_LAYOUT_NUMERIC_XML);      
     } catch (IOException e) {
       e.printStackTrace();
     }
