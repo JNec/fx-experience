@@ -8,9 +8,13 @@
 package org.comtel.javafx.model;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.comtel.javafx.control.DefaultLayers;
+import org.comtel.javafx.model.cache.KeyboardConfigCacheItem;
 import org.comtel.javafx.xml.KeyboardLayoutHandler;
 import org.comtel.javafx.xml.layout.KbLayoutXMLEnum;
 import org.comtel.javafx.xml.layout.Keyboard;
@@ -18,18 +22,19 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Describe the type here.
- *
+ * 
  * @author nenad.jankovski
  * @see AXN-
  * @since 29.0 (Feb 25, 2015)
  */
 public class ClasspathKeyboardConfigProvider implements KeyboardConfigProvider {
-  
+
   private final static org.slf4j.Logger logger = LoggerFactory.getLogger(ClasspathKeyboardConfigProvider.class);
-  
+
   private final String BASE_PATH = "/xml/";
-  KeyboardLayoutHandler handler = new KeyboardLayoutHandler();
-  
+  private final KeyboardLayoutHandler handler = new KeyboardLayoutHandler();
+  private final Map<KeyboardConfigCacheItem, Keyboard> cache = new HashMap<KeyboardConfigCacheItem, Keyboard>();
+
   public ClasspathKeyboardConfigProvider() {
   }
 
@@ -38,12 +43,37 @@ public class ClasspathKeyboardConfigProvider implements KeyboardConfigProvider {
    */
   @Override
   public Keyboard getLayout(Locale loc, DefaultLayers layer, KbLayoutXMLEnum layoutXMLEnum) throws IOException {
-    
+
     String xmlPath = BASE_PATH + layer.toString().toLowerCase(Locale.ENGLISH)
         + (loc.getLanguage().equals("en") ? "/" : "/" + loc.getLanguage() + "/");
-    logger.info("use embedded layouts path: {}", xmlPath);
-    
-    return handler.getLayoutFromClasspath(xmlPath + layoutXMLEnum);
+    logger.debug("use embedded layouts path: {}", xmlPath);
+
+    // check cache
+    return getItem(loc.getLanguage(), layer, layoutXMLEnum, xmlPath);
+  }
+
+  /**
+   * @param language
+   * @param layer
+   * @param layoutXMLEnum
+   * @return
+   * @throws IOException
+   */
+  private Keyboard getItem(String language, DefaultLayers layer, KbLayoutXMLEnum layoutXMLEnum, String xmlPath)
+      throws IOException {
+
+    KeyboardConfigCacheItem cacheItem = new KeyboardConfigCacheItem(language, layer, layoutXMLEnum);
+
+    for (Entry<KeyboardConfigCacheItem, Keyboard> entry : cache.entrySet()) {
+      if (entry.getKey().equals(cacheItem)) {
+        logger.debug("Getting keyboard from cache: " + language + " - " + layer + " - " + layoutXMLEnum);
+        return entry.getValue();
+      }
+    }
+    Keyboard kb = handler.getLayoutFromClasspath(xmlPath + layoutXMLEnum);
+    cache.put(cacheItem, kb);
+
+    return kb;
   }
 
 }
