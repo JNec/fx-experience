@@ -47,7 +47,6 @@ import org.comtel.javafx.model.ClasspathKeyboardConfigProvider;
 import org.comtel.javafx.model.KeyboardConfig;
 import org.comtel.javafx.model.KeyboardConfigProvider;
 import org.comtel.javafx.robot.IRobot;
-import org.comtel.javafx.xml.KeyboardLayoutHandler;
 import org.comtel.javafx.xml.layout.KbLayoutXMLEnum;
 import org.comtel.javafx.xml.layout.Keyboard;
 import org.slf4j.LoggerFactory;
