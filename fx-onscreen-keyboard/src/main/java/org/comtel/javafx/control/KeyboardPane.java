@@ -47,6 +47,7 @@ import org.comtel.javafx.model.ClasspathKeyboardConfigProvider;
 import org.comtel.javafx.model.KeyboardConfig;
 import org.comtel.javafx.model.KeyboardConfigProvider;
 import org.comtel.javafx.robot.IRobot;
+import org.comtel.javafx.xml.KeyboardLayoutHandler;
 import org.comtel.javafx.xml.layout.KbLayoutXMLEnum;
 import org.comtel.javafx.xml.layout.Keyboard;
 import org.slf4j.LoggerFactory;
@@ -54,8 +55,8 @@ import org.slf4j.LoggerFactory;
 public class KeyboardPane extends Region implements StandardKeyCode, EventHandler<KeyButtonEvent> {
 
   private final static org.slf4j.Logger logger = LoggerFactory.getLogger(KeyboardPane.class);
-  
-  private KeyboardConfigProvider provider = new ClasspathKeyboardConfigProvider();
+  private final KeyboardLayoutHandler handler = new KeyboardLayoutHandler();
+  private KeyboardConfigProvider provider = new ClasspathKeyboardConfigProvider(handler);
 
   private final String DEFAULT_CSS = "/css/KeyboardButtonStyle.css";
   // private final String DEFAULT_FONT_URL = "/font/FontKeyboardFX.ttf";

@@ -32,10 +32,11 @@ public class ClasspathKeyboardConfigProvider implements KeyboardConfigProvider {
   private final static org.slf4j.Logger logger = LoggerFactory.getLogger(ClasspathKeyboardConfigProvider.class);
 
   private final String BASE_PATH = "/xml/";
-  private final KeyboardLayoutHandler handler = new KeyboardLayoutHandler();
+  private final KeyboardLayoutHandler handler;
   private final Map<KeyboardConfigCacheItem, Keyboard> cache = new HashMap<KeyboardConfigCacheItem, Keyboard>();
 
-  public ClasspathKeyboardConfigProvider() {
+  public ClasspathKeyboardConfigProvider(KeyboardLayoutHandler handler) {
+    this.handler = handler;
   }
 
   /* (non-Javadoc)
