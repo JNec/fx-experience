@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import javafx.util.Builder;
 
+import org.comtel.javafx.model.KeyboardConfigProvider;
 import org.comtel.javafx.robot.IRobot;
 
 public class KeyBoardPopupBuilder implements Builder<KeyBoardPopup> {
@@ -37,6 +38,11 @@ public class KeyBoardPopupBuilder implements Builder<KeyBoardPopup> {
 		kb.layer(l);
 		return this;
 	}
+	
+	public KeyBoardPopupBuilder layerProvider(KeyboardConfigProvider provider) {
+          kb.layoutProvider(provider);
+          return this;
+        }
 	
 	public KeyBoardPopupBuilder style(String css) {
 		kb.style(css);

@@ -8,6 +8,7 @@
 package org.comtel.javafx.model;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Locale;
 
 import org.comtel.javafx.control.DefaultLayers;
@@ -23,4 +24,11 @@ import org.comtel.javafx.xml.layout.Keyboard;
  */
 public interface KeyboardConfigProvider {
   public Keyboard getLayout(Locale loc, DefaultLayers layer, KbLayoutXMLEnum layoutXMLEnum) throws IOException;
+  public Collection<Locale> getAvailableLocales();
+  
+  /**
+   * Checks if the wrapped configuration is valid.
+   * @return true if the configuration can provide actual Kyeboard objects.
+   */
+  public boolean isValid();
 }

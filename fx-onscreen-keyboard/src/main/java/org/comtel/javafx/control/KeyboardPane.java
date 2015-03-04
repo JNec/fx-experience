@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.Locale;
-import java.util.Map;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
@@ -44,7 +42,6 @@ import javafx.scene.transform.Scale;
 
 import org.comtel.javafx.event.KeyButtonEvent;
 import org.comtel.javafx.model.ClasspathKeyboardConfigProvider;
-import org.comtel.javafx.model.KeyboardConfig;
 import org.comtel.javafx.model.KeyboardConfigProvider;
 import org.comtel.javafx.robot.IRobot;
 import org.comtel.javafx.xml.KeyboardLayoutHandler;
@@ -56,7 +53,9 @@ public class KeyboardPane extends Region implements StandardKeyCode, EventHandle
 
   private final static org.slf4j.Logger logger = LoggerFactory.getLogger(KeyboardPane.class);
   private final KeyboardLayoutHandler handler = new KeyboardLayoutHandler();
-  private KeyboardConfigProvider provider = new ClasspathKeyboardConfigProvider(handler);
+  
+  private KeyboardConfigProvider defaultProvider = new ClasspathKeyboardConfigProvider(handler);
+  private KeyboardConfigProvider keyboardLayoutConfigProvider = defaultProvider;
 
   private final String DEFAULT_CSS = "/css/KeyboardButtonStyle.css";
   // private final String DEFAULT_FONT_URL = "/font/FontKeyboardFX.ttf";
@@ -94,7 +93,6 @@ public class KeyboardPane extends Region implements StandardKeyCode, EventHandle
   private double mousePressedY;
 
   private final ObservableList<IRobot> robots = FXCollections.observableArrayList();
-  private final ObservableList<KeyboardConfig> keyboardCondifgs = FXCollections.observableArrayList();
 
   public KeyboardPane() {
     setId("key-background");
@@ -196,7 +194,8 @@ public class KeyboardPane extends Region implements StandardKeyCode, EventHandle
           qwertyCtrlKeyboardPane,
           symbolKeyboardPane,
           symbolShiftedKeyboardPane);
-
+      
+      logger.info("Keyboard pane from cache with provider: "+keyboardLayoutConfigProvider);
       for (javafx.scene.Node node : getChildren()) {
         node.setVisible(false);
       }      
@@ -205,14 +204,14 @@ public class KeyboardPane extends Region implements StandardKeyCode, EventHandle
     currentLocale.set(local);
     localeProperty.set(local);
     logger.debug("try to set keyboard local: {}", local);
-    
+    logger.info("Keyboard layout config provider : "+keyboardLayoutConfigProvider);
     try {
       getChildren().clear();
-      qwertyKeyboardPane = createKeyboardPane(provider.getLayout(local, layerProperty().get(), KbLayoutXMLEnum.KB_LAYOUT_XML));
-      qwertyShiftedKeyboardPane = createKeyboardPane(provider.getLayout(local, layerProperty().get(), KbLayoutXMLEnum.KB_LAYOUT_SHIFT_XML));
-      qwertyCtrlKeyboardPane = createKeyboardPane(provider.getLayout(local, layerProperty().get(), KbLayoutXMLEnum.KB_LAYOUT_CTRL_XML));
-      symbolKeyboardPane = createKeyboardPane(provider.getLayout(local, layerProperty().get(), KbLayoutXMLEnum.KB_LAYOUT_SYM_XML));
-      symbolShiftedKeyboardPane = createKeyboardPane(provider.getLayout(local, layerProperty().get(), KbLayoutXMLEnum.KB_LAYOUT_SYM_SHIFT_XML));
+      qwertyKeyboardPane = createKeyboardPane(getLayout(keyboardLayoutConfigProvider, local, layerProperty().get(), KbLayoutXMLEnum.KB_LAYOUT_XML));
+      qwertyShiftedKeyboardPane = createKeyboardPane(getLayout(keyboardLayoutConfigProvider, local, layerProperty().get(), KbLayoutXMLEnum.KB_LAYOUT_SHIFT_XML));
+      qwertyCtrlKeyboardPane = createKeyboardPane(getLayout(keyboardLayoutConfigProvider, local, layerProperty().get(), KbLayoutXMLEnum.KB_LAYOUT_CTRL_XML));
+      symbolKeyboardPane = createKeyboardPane(getLayout(keyboardLayoutConfigProvider, local, layerProperty().get(), KbLayoutXMLEnum.KB_LAYOUT_SYM_XML));
+      symbolShiftedKeyboardPane = createKeyboardPane(getLayout(keyboardLayoutConfigProvider, local, layerProperty().get(), KbLayoutXMLEnum.KB_LAYOUT_SYM_SHIFT_XML));
     
     } catch (IOException ex) {
       throw new RuntimeException(ex);
@@ -232,10 +231,32 @@ public class KeyboardPane extends Region implements StandardKeyCode, EventHandle
 
   }
 
+  /**
+   * @param keyboardLayoutConfigProvider2
+   * @param local
+   * @param defaultLayers
+   * @param kbLayoutXml
+   * @return
+   */
+  private Keyboard getLayout(
+      KeyboardConfigProvider keyboardLayoutConfigProvider,
+      Locale local,
+      DefaultLayers layer,
+      KbLayoutXMLEnum layoutXMLEnum) throws IOException {
+    Keyboard kb = keyboardLayoutConfigProvider.getLayout(local, layer, layoutXMLEnum);
+    
+    if (kb == null) {
+      //load default
+      kb = keyboardLayoutConfigProvider.getLayout(Locale.ENGLISH, layer, layoutXMLEnum);
+    }
+    
+    return kb;
+  }
+
   public void setNumericOnlyLayout(Locale local) {
     Keyboard keyboard = null;
     try {      
-        keyboard = provider.getLayout(local, DefaultLayers.DEFAULT, KbLayoutXMLEnum.KB_LAYOUT_NUMERIC_XML);      
+        keyboard = getLayout(keyboardLayoutConfigProvider, local, DefaultLayers.DEFAULT, KbLayoutXMLEnum.KB_LAYOUT_NUMERIC_XML);      
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -248,16 +269,8 @@ public class KeyboardPane extends Region implements StandardKeyCode, EventHandle
     getChildren().add(numericKeyboardPane);
   }
 
-  public Map<Locale, Path> getAvailableLocales() {
-
-    Map<Locale, Path> localList = new HashMap<>();
-    localList.put(new Locale("de"), null);
-    localList.put(new Locale("ru"), null);
-
-    for (KeyboardConfig config : keyboardCondifgs) {
-      localList.put(config.getLocale(), null);
-    }
-    return localList;
+  public Collection<Locale> getAvailableLocales(KeyboardConfigProvider keyboardLayoutConfigProvider) {
+    return keyboardLayoutConfigProvider.getAvailableLocales();
   }
 
   public void setKeyboardLayer(KeyboardLayer layer) {
@@ -399,7 +412,7 @@ public class KeyboardPane extends Region implements StandardKeyCode, EventHandle
               LOCALE_SWITCH,
               Locale.ENGLISH.getLanguage().toUpperCase(Locale.ENGLISH),
               button.getStyleClass());
-          for (Locale l : getAvailableLocales().keySet()) {
+          for (Locale l : getAvailableLocales(keyboardLayoutConfigProvider)) {
             button.addExtKeyCode(LOCALE_SWITCH, l.getLanguage().toUpperCase(Locale.ENGLISH), button.getStyleClass());
           }
         }
@@ -635,14 +648,6 @@ public class KeyboardPane extends Region implements StandardKeyCode, EventHandle
     robots.remove(robot);
   }
 
-  public void addKeyboardConfig(KeyboardConfig config) {
-    keyboardCondifgs.add(config);
-  }
-
-  public void removeKeyboardConfig(KeyboardConfig config) {
-    keyboardCondifgs.remove(config);
-  }
-
   public void setOnKeyboardCloseButton(EventHandler<? super Event> value) {
     closeEventHandler = value;
   }
@@ -709,6 +714,19 @@ public class KeyboardPane extends Region implements StandardKeyCode, EventHandle
 
   public void setSpaceKeyMove(boolean m) {
     spaceKeyMoveProperty.set(m);
+  }
+
+  public KeyboardConfigProvider getKeyboardLayoutConfigProvider() {
+    return keyboardLayoutConfigProvider;
+  }
+
+  public void setKeyboardLayoutConfigProvider(KeyboardConfigProvider keyboardLayoutConfigProvider) {
+    
+    if (keyboardLayoutConfigProvider == null || !keyboardLayoutConfigProvider.isValid()) {
+      return;
+    }
+     
+    this.keyboardLayoutConfigProvider = keyboardLayoutConfigProvider;
   }
 
   class MouseMovedHandler implements EventHandler<MouseEvent> {

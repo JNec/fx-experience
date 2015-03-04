@@ -8,6 +8,8 @@
 package org.comtel.javafx.model;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -75,6 +77,22 @@ public class ClasspathKeyboardConfigProvider implements KeyboardConfigProvider {
     cache.put(cacheItem, kb);
 
     return kb;
+  }
+
+  /* (non-Javadoc)
+   * @see org.comtel.javafx.model.KeyboardConfigProvider#isValid()
+   */
+  @Override
+  public boolean isValid() {
+    return true;
+  }
+
+  /* (non-Javadoc)
+   * @see org.comtel.javafx.model.KeyboardConfigProvider#getAvailableLocales()
+   */
+  @Override
+  public Collection<Locale> getAvailableLocales() {
+    return Arrays.asList(new Locale("de"), new Locale("ru"));
   }
 
 }

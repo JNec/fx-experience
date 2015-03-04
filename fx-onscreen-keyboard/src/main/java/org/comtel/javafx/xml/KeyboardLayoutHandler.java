@@ -38,7 +38,7 @@ public class KeyboardLayoutHandler {
       return getLayout(is);
     }
     logger.warn("layout not found on: " + fileUrl);
-    return new Keyboard();
+    return null;
 
   }
 

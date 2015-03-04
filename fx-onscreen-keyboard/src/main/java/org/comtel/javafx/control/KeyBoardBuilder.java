@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import javafx.util.Builder;
 
+import org.comtel.javafx.model.KeyboardConfigProvider;
 import org.comtel.javafx.robot.IRobot;
 
 public class KeyBoardBuilder implements Builder<KeyboardPane> {
@@ -15,6 +16,7 @@ public class KeyBoardBuilder implements Builder<KeyboardPane> {
 	private List<IRobot> iRobots;
 	private String style;
 	private double initScale = 0.0;
+	private KeyboardConfigProvider provider;
 
 	protected KeyBoardBuilder() {
 		iRobots = new ArrayList<>(2);
@@ -48,6 +50,11 @@ public class KeyBoardBuilder implements Builder<KeyboardPane> {
 		iRobots.add(robot);
 		return this;
 	}
+	
+	public KeyBoardBuilder layoutProvider(KeyboardConfigProvider provider) {
+	  this.provider = provider;
+	  return this;
+	}
 
 	@Override
 	public KeyboardPane build(){
@@ -68,6 +75,10 @@ public class KeyBoardBuilder implements Builder<KeyboardPane> {
 		}
 		for (IRobot robot : iRobots) {
 			kb.addRobotHandler(robot);
+		}
+		
+		if (provider != null) {
+		  kb.setKeyboardLayoutConfigProvider(provider);
 		}
 		iRobots.clear();
 		iRobots = null;
