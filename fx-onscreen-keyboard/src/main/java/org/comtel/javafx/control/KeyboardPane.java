@@ -53,7 +53,7 @@ public class KeyboardPane extends Region implements StandardKeyCode, EventHandle
 
   private final static org.slf4j.Logger logger = LoggerFactory.getLogger(KeyboardPane.class);
   private final KeyboardLayoutHandler handler = new KeyboardLayoutHandler();
-  
+
   private KeyboardConfigProvider defaultProvider = new ClasspathKeyboardConfigProvider(handler);
   private KeyboardConfigProvider keyboardLayoutConfigProvider = defaultProvider;
 
@@ -194,29 +194,43 @@ public class KeyboardPane extends Region implements StandardKeyCode, EventHandle
           qwertyCtrlKeyboardPane,
           symbolKeyboardPane,
           symbolShiftedKeyboardPane);
-      
-      logger.info("Keyboard pane from cache with provider: "+keyboardLayoutConfigProvider);
+
+      logger.info("Keyboard pane from cache with provider: " + keyboardLayoutConfigProvider);
       for (javafx.scene.Node node : getChildren()) {
         node.setVisible(false);
-      }      
+      }
       return;
     }
     currentLocale.set(local);
     localeProperty.set(local);
     logger.debug("try to set keyboard local: {}", local);
-    logger.info("Keyboard layout config provider : "+keyboardLayoutConfigProvider);
+    logger.info("Keyboard layout config provider : " + keyboardLayoutConfigProvider);
     try {
       getChildren().clear();
-      qwertyKeyboardPane = createKeyboardPane(getLayout(keyboardLayoutConfigProvider, local, layerProperty().get(), KbLayoutXMLEnum.KB_LAYOUT_XML));
-      qwertyShiftedKeyboardPane = createKeyboardPane(getLayout(keyboardLayoutConfigProvider, local, layerProperty().get(), KbLayoutXMLEnum.KB_LAYOUT_SHIFT_XML));
-      qwertyCtrlKeyboardPane = createKeyboardPane(getLayout(keyboardLayoutConfigProvider, local, layerProperty().get(), KbLayoutXMLEnum.KB_LAYOUT_CTRL_XML));
-      symbolKeyboardPane = createKeyboardPane(getLayout(keyboardLayoutConfigProvider, local, layerProperty().get(), KbLayoutXMLEnum.KB_LAYOUT_SYM_XML));
-      symbolShiftedKeyboardPane = createKeyboardPane(getLayout(keyboardLayoutConfigProvider, local, layerProperty().get(), KbLayoutXMLEnum.KB_LAYOUT_SYM_SHIFT_XML));
-    
+      qwertyKeyboardPane = createKeyboardPane(getLayout(
+          keyboardLayoutConfigProvider,
+          local,
+          layerProperty().get(),
+          KbLayoutXMLEnum.KB_LAYOUT_XML));
+      qwertyShiftedKeyboardPane = createKeyboardPane(getLayout(keyboardLayoutConfigProvider, local, layerProperty()
+          .get(), KbLayoutXMLEnum.KB_LAYOUT_SHIFT_XML));
+      qwertyCtrlKeyboardPane = createKeyboardPane(getLayout(
+          keyboardLayoutConfigProvider,
+          local,
+          layerProperty().get(),
+          KbLayoutXMLEnum.KB_LAYOUT_CTRL_XML));
+      symbolKeyboardPane = createKeyboardPane(getLayout(
+          keyboardLayoutConfigProvider,
+          local,
+          layerProperty().get(),
+          KbLayoutXMLEnum.KB_LAYOUT_SYM_XML));
+      symbolShiftedKeyboardPane = createKeyboardPane(getLayout(keyboardLayoutConfigProvider, local, layerProperty()
+          .get(), KbLayoutXMLEnum.KB_LAYOUT_SYM_SHIFT_XML));
+
     } catch (IOException ex) {
       throw new RuntimeException(ex);
     }
-    
+
     getChildren().addAll(
         qwertyKeyboardPane,
         qwertyShiftedKeyboardPane,
@@ -244,25 +258,29 @@ public class KeyboardPane extends Region implements StandardKeyCode, EventHandle
       DefaultLayers layer,
       KbLayoutXMLEnum layoutXMLEnum) throws IOException {
     Keyboard kb = keyboardLayoutConfigProvider.getLayout(local, layer, layoutXMLEnum);
-    
+
     if (kb == null) {
-      //load default
+      // load default
       kb = keyboardLayoutConfigProvider.getLayout(Locale.ENGLISH, layer, layoutXMLEnum);
     }
-    
+
     return kb;
   }
 
   public void setNumericOnlyLayout(Locale local) {
     Keyboard keyboard = null;
-    try {      
-        keyboard = getLayout(keyboardLayoutConfigProvider, local, DefaultLayers.DEFAULT, KbLayoutXMLEnum.KB_LAYOUT_NUMERIC_XML);      
+    try {
+      keyboard = getLayout(
+          keyboardLayoutConfigProvider,
+          Locale.ENGLISH,
+          DefaultLayers.DEFAULT,
+          KbLayoutXMLEnum.KB_LAYOUT_NUMERIC_XML);
     } catch (IOException e) {
       e.printStackTrace();
     }
 
     getChildren().clear();
-    
+
     if (numericKeyboardPane == null) {
       numericKeyboardPane = createKeyboardPane(keyboard);
     }
@@ -557,7 +575,7 @@ public class KeyboardPane extends Region implements StandardKeyCode, EventHandle
         break;
       case LOCALE_SWITCH:
         Locale l = new Locale(kb.getText());
-        try {         
+        try {
           setLayoutLocale(l);
         } catch (RuntimeException e) {
           logger.error(e.getMessage(), e);
@@ -721,11 +739,11 @@ public class KeyboardPane extends Region implements StandardKeyCode, EventHandle
   }
 
   public void setKeyboardLayoutConfigProvider(KeyboardConfigProvider keyboardLayoutConfigProvider) {
-    
+
     if (keyboardLayoutConfigProvider == null || !keyboardLayoutConfigProvider.isValid()) {
       return;
     }
-     
+
     this.keyboardLayoutConfigProvider = keyboardLayoutConfigProvider;
   }
 
