@@ -287,7 +287,7 @@ public class KeyboardPane extends Region implements StandardKeyCode, EventHandle
     getChildren().add(numericKeyboardPane);
   }
 
-  public Collection<Locale> getAvailableLocales(KeyboardConfigProvider keyboardLayoutConfigProvider) {
+  private Collection<Locale> getAvailableLocales(KeyboardConfigProvider keyboardLayoutConfigProvider) {
     return keyboardLayoutConfigProvider.getAvailableLocales();
   }
 
