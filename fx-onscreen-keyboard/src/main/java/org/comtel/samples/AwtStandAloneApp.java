@@ -88,7 +88,7 @@ public class AwtStandAloneApp extends JApplet {
 			logger.error(e.getMessage(), e);
 		}
 
-		fxKeyboardPopup = KeyBoardPopupBuilder.create().initLocale(locale).addIRobot(RobotFactory.createNativeAsciiRobot()).layerPath(path).layer(DefaultLayers.NUMBLOCK).build();
+		fxKeyboardPopup = KeyBoardPopupBuilder.create().initLocale(locale).addIRobot(RobotFactory.createNativeAsciiRobot()).layer(DefaultLayers.NUMBLOCK).build();
 		fxKeyboardPopup.getKeyBoard().setOnKeyboardCloseButton(e -> System.exit(0));
 
 		fxKeyboardPopup.setOwner(scene);
