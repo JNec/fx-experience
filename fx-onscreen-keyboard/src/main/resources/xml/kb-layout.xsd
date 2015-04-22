@@ -50,6 +50,7 @@
 			<xsd:attribute name="keyHeight" type="xsd:int"></xsd:attribute>
 			<xsd:attribute name="horizontalGap" type="xsd:int"></xsd:attribute>
 			<xsd:attribute name="verticalGap" type="xsd:int"></xsd:attribute>
+			<xsd:attribute name="debug" type="xsd:boolean"></xsd:attribute>
 		</xsd:complexType>
 	</xsd:element>
 
