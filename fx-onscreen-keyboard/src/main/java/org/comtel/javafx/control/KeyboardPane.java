@@ -29,6 +29,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -334,6 +335,7 @@ public class KeyboardPane extends Region implements StandardKeyCode, EventHandle
   private Region createKeyboardPane(Keyboard layout) {
 
     GridPane rPane = new GridPane();
+    rPane.gridLinesVisibleProperty().set(layout.getDebug());
     rPane.setAlignment(Pos.CENTER);
     // pane.setPrefSize(600, 200);
 
@@ -357,6 +359,7 @@ public class KeyboardPane extends Region implements StandardKeyCode, EventHandle
       int colIdx = 0;
       GridPane colPane = new GridPane();
       colPane.setId("key-background-column");
+      colPane.gridLinesVisibleProperty().set(layout.getDebug());
       // colPane.setVgap(20);
       // colPane.setPrefWidth(Region.USE_COMPUTED_SIZE);
 
@@ -405,6 +408,10 @@ public class KeyboardPane extends Region implements StandardKeyCode, EventHandle
         button.setPrefHeight(defaultKeyHeight);
         button.setPrefWidth(defaultKeyWidth);
         button.setMaxWidth(defaultKeyWidth * 100);
+        
+        if (layout.getDebug()) {
+          button.setTooltip(new Tooltip(KeyboardKeyToStringHelper.toString(key)));
+        }
 
         String[] codes = key.getCodes().split(",");
         if (codes.length > 0 && !codes[0].isEmpty()) {

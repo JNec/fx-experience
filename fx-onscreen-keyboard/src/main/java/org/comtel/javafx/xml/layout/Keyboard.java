@@ -97,6 +97,8 @@ public class Keyboard {
     protected Integer horizontalGap;
     @XmlAttribute(name = "verticalGap")
     protected Integer verticalGap;
+    @XmlAttribute(name = "debug")
+    private Boolean debug;
 
     /**
      * Gets the value of the row property.
@@ -221,6 +223,15 @@ public class Keyboard {
      */
     public void setVerticalGap(Integer value) {
         this.verticalGap = value;
+    }
+
+
+    public Boolean getDebug() {
+      return debug == null ? false : debug;
+    }
+
+    public void setDebug(Boolean debug) {
+      this.debug = debug;
     }
 
 
@@ -552,6 +563,13 @@ public class Keyboard {
              */
             public void setHorizontalGap(Integer value) {
                 this.horizontalGap = value;
+            }
+
+            @Override
+            public String toString() {
+              return "Key [codes=" + codes + ", keyLabel=" + keyLabel + ", keyIconStyle=" + keyIconStyle
+                  + ", keyLabelStyle=" + keyLabelStyle + ", keyWidth=" + keyWidth + ", keyEdgeFlags=" + keyEdgeFlags
+                  + ", horizontalGap=" + horizontalGap + "]";
             }
 
         }
