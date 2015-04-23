@@ -52,7 +52,7 @@
 		<Key codes="-6" keyLabel="CTRL" keyLabelStyle=".small-style" keyWidth="62" />
 		<Key codes="-14" keyLabel="UNDO" keyLabelStyle=".small-style" keyWidth="50" />
 		<Key codes="32" keyLabel="3" keyLabelStyle=".font-fxkeyboard-alpha" keyWidth="290" isRepeatable="true" />
-		<Key codes="-7" keyLabel="DE" keyLabelStyle=".small-style" keyWidth="50" />
+		<Key codes="-7" keyLabel="CH" keyLabelStyle=".small-style" keyWidth="50" />
 		<Key codes="-4" keyLabel="TAB" keyLabelStyle=".small-style" keyWidth="62" />
 		<Key codes="" keyWidth="5" />
 		<Key codes="48" keyLabel="0" />

@@ -10,6 +10,8 @@ import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -28,6 +30,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import org.comtel.javafx.control.DefaultLayers;
 import org.comtel.javafx.control.KeyBoardPopup;
 import org.comtel.javafx.control.KeyBoardPopupBuilder;
 import org.comtel.javafx.robot.RobotFactory;
@@ -44,13 +47,15 @@ public class MainDemo extends Application {
 		stage.setTitle("FX Keyboard (" + System.getProperty("javafx.runtime.version") + ")");
 		stage.setResizable(true);
 
-		popup = KeyBoardPopupBuilder.create().initScale(1.0).initLocale(Locale.ENGLISH).addIRobot(RobotFactory.createFXRobot()).build();
+		popup = KeyBoardPopupBuilder.create().initScale(1.0).initLocale(Locale.ITALIAN).layer(DefaultLayers.NUMBLOCK).addIRobot(RobotFactory.createFXRobot()).build();
 		popup.getKeyBoard().setOnKeyboardCloseButton(event -> setPopupVisible(false, null));
 		
 		VBox pane = new VBox(20);
 
 		Button okButton = new Button("Ok");
 		okButton.setDefaultButton(true);
+		
+		Label l = new Label("Label");
 
 		Button cancelButton = new Button("Cancel");
 		cancelButton.setCancelButton(true);
@@ -59,9 +64,25 @@ public class MainDemo extends Application {
 		spaceKeyMoveCb.setSelected(true);
 		popup.getKeyBoard().spaceKeyMoveProperty().bind(spaceKeyMoveCb.selectedProperty());
 		
-		pane.getChildren().add(new ToolBar(okButton, cancelButton, spaceKeyMoveCb));
+		TextField tf = new TextField("");
+		tf.textProperty().addListener(new ChangeListener<String>() {
+		  /* (non-Javadoc)
+		   * @see javafx.beans.value.ChangeListener#changed(javafx.beans.value.ObservableValue, java.lang.Object, java.lang.Object)
+		   */
+		  @Override
+		  public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+		    if ("".equals(newValue)) {
+		      l.setText("");
+		      return;
+		    }
+		    l.setText((int)newValue.toCharArray()[newValue.length()-1]+"");
+		    
+		  }
+                });
+		
+		pane.getChildren().add(new ToolBar(okButton, cancelButton, spaceKeyMoveCb, l));
 		pane.getChildren().add(new Label("Text1"));
-		pane.getChildren().add(new TextField(""));
+		pane.getChildren().add(tf);
 		pane.getChildren().add(new TextArea(""));
 		pane.getChildren().add(new Label("Password"));
 		pane.getChildren().add(new PasswordField());
