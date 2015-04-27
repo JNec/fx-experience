@@ -12,16 +12,15 @@
 		<Key codes="73" keyLabel="I" />
 		<Key codes="79,214,213,212,211,210,216" keyLabel="O" />
 		<Key codes="80" keyLabel="P" />
-		<Key codes="220" keyLabel="Ü" />
-		<Key codes="-5" keyLabel="!" keyLabelStyle=".font-fxkeyboard" isRepeatable="true" keyWidth="50"/>
-		<Key codes="" keyWidth="4" />
+		<Key codes="-5" keyLabel="!" keyLabelStyle=".font-fxkeyboard" isRepeatable="true" />
+		<Key codes="" keyWidth="5" />
 		<Key codes="55" keyLabel="7" />
 		<Key codes="56" keyLabel="8" />
 		<Key codes="57" keyLabel="9" />
 	</Row>
 
 	<Row>
-		<Key codes="" keyWidth="1" />
+		<Key codes="" keyWidth="10" />
 		<Key codes="65,196,197,195,194,193,192" keyLabel="A" />
 		<Key codes="83,223" keyLabel="S" />
 		<Key codes="68" keyLabel="D" />
@@ -31,17 +30,15 @@
 		<Key codes="74" keyLabel="J" />
 		<Key codes="75" keyLabel="K" />
 		<Key codes="76" keyLabel="L" />
-		<Key codes="214" keyLabel="Ö" />
-		<Key codes="196" keyLabel="Ä" />
-		<Key codes="-9" keyLabel="ENTER" keyLabelStyle=".small-style" keyWidth="50" />
-		<Key codes="" keyWidth="4" />
+		<Key codes="-9" keyLabel="ENTER" keyLabelStyle=".small-style" keyWidth="70" />
+		<Key codes="" keyWidth="5" />
 		<Key codes="52" keyLabel="4" />
 		<Key codes="53" keyLabel="5" />
 		<Key codes="54" keyLabel="6" />
 	</Row>
 
 	<Row>
-		<Key codes="-1" keyLabel="J" keyLabelStyle=".font-fxkeyboard" keyWidth="62" isModifier="true" isSticky="true" />
+		<Key codes="-1" keyLabel="J" keyLabelStyle=".font-fxkeyboard" keyWidth="40" isModifier="true" isSticky="true" />
 		<Key codes="89" keyLabel="Y" />
 		<Key codes="88" keyLabel="X" />
 		<Key codes="67" keyLabel="C" />
@@ -51,7 +48,7 @@
 		<Key codes="77" keyLabel="M" />
 		<Key codes="59" keyLabel=";" />
 		<Key codes="58" keyLabel=":" />
-		<Key codes="-1" keyLabel="J" keyLabelStyle=".font-fxkeyboard" keyWidth="64" isModifier="true" isSticky="true" />
+		<Key codes="-1" keyLabel="J" keyLabelStyle=".font-fxkeyboard" keyWidth="40" isModifier="true" isSticky="true" />
 		<Key codes="" keyWidth="5" />
 		<Key codes="49" keyLabel="1" />
 		<Key codes="50" keyLabel="2" />
@@ -60,13 +57,14 @@
 
 
 	<Row rowEdgeFlags="bottom">
-		<Key codes="-6" keyLabel="CTRL" keyLabelStyle=".small-style" keyWidth="62" />
+		<Key codes="-6" keyLabel="CTRL" keyLabelStyle=".small-style" keyWidth="60" />
 		<Key codes="-2" keyLabel="?$#" keyLabelStyle=".small-style" keyWidth="50" />
 		<Key codes="-12" keyLabel="◄" keyLabelStyle=".small-style" />
-		<Key codes="32" keyLabel="3" keyLabelStyle=".font-fxkeyboard-alpha" keyWidth="200" isRepeatable="true" />
+		<Key codes="32" keyLabel="3" keyLabelStyle=".font-fxkeyboard-alpha" keyWidth="170" isRepeatable="true" />
 		<Key codes="-13" keyLabel="►" keyLabelStyle=".small-style" />
-		<Key codes="-7" keyLabel="CH" keyLabelStyle=".small-style" keyWidth="50" />
-		<Key codes="-4" keyLabel="TAB" keyLabelStyle=".small-style" keyWidth="62" />
+		<Key codes="-7" keyLabel="DE" keyLabelStyle=".small-style" keyWidth="40" />
+		<Key codes="-4" keyLabel="TAB" keyLabelStyle=".small-style" keyWidth="50" />
+
 		<Key codes="" keyWidth="5" />
 		<Key codes="48" keyLabel="0" />
 		<Key codes="95" keyLabel="_" />
